@@ -72,12 +72,22 @@ void Error_Handler(void);
 #define LD2_GPIO_Port GPIOA
 #define ILI9341_CS_Pin GPIO_PIN_1
 #define ILI9341_CS_GPIO_Port GPIOB
+#define SDCARD_CS_Pin GPIO_PIN_14
+#define SDCARD_CS_GPIO_Port GPIOB
 #define TMS_Pin GPIO_PIN_13
 #define TMS_GPIO_Port GPIOA
 #define TCK_Pin GPIO_PIN_14
 #define TCK_GPIO_Port GPIOA
 #define SWO_Pin GPIO_PIN_3
 #define SWO_GPIO_Port GPIOB
+#define ENCODER1_INB_Pin GPIO_PIN_4
+#define ENCODER1_INB_GPIO_Port GPIOB
+#define ENCODER1_INA_Pin GPIO_PIN_5
+#define ENCODER1_INA_GPIO_Port GPIOB
+#define ENCODER0_INB_Pin GPIO_PIN_6
+#define ENCODER0_INB_GPIO_Port GPIOB
+#define ENCODER0_INA_Pin GPIO_PIN_7
+#define ENCODER0_INA_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 
