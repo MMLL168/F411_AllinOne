@@ -48,7 +48,8 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define DWT_CONTROL *(volatile unsigned long *)0xE0001000
+#define SCB_DEMCR   *(volatile unsigned long *)0xE000EDFC
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -241,8 +242,8 @@ volatile uint16_t adc_min[2]    = { -1 };
 volatile uint32_t adc_period[2] = {  0 };
 volatile uint8_t  adc_period0_detected = 0;
 volatile uint8_t  adc_period1_detected = 0;
-#define ADC_BUFFER_SIZE 512
-#define ADC_CHANNEL0_SCALE 11
+#define ADC_BUFFER_SIZE 2048//512
+#define ADC_CHANNEL0_SCALE 1//11
 #define ADC_CHANNEL1_SCALE 1
 uint32_t adc0_time[ADC_BUFFER_SIZE];
 uint32_t adc1_time[ADC_BUFFER_SIZE];
@@ -728,6 +729,9 @@ int main(void)
 
   txIndex = 0;
 
+  // For DWT->CYCCNT ...
+  SCB_DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+  DWT_CONTROL |= DWT_CTRL_CYCCNTENA_Msk;
 
   // Display init
   display.spi             = &hspi5;
@@ -749,7 +753,7 @@ int main(void)
 
   uint8_t  menu_extended         = 0;
   uint8_t  menu_channel0_enabled = 1;
-  uint8_t  menu_channel1_enabled = 0;
+  uint8_t  menu_channel1_enabled = 1;//0;
   int8_t   menu_selected_item    = 2;
   uint16_t menu_selector_x       = 96;
   uint16_t menu_selector_y       = 3;
@@ -837,24 +841,12 @@ int main(void)
 		// Draw signals
 		if (local_event_adc) {
 
-            if (menu_channel0_enabled && !adc0_filled)
-                drawSignal(&display, adc0_time, adc0, adc0_length, pixel_dirty0, cursor0, ILI9341_YELLOW);
-            else if (menu_channel0_enabled && adc0_filled) {
-                clearSignal(&display, pixel_dirty0);
-                ILI9341_WriteString(&display, 60, cursor0, "No Data", Font_7x10, ILI9341_GRAY, ILI9341_BLACK);
-                // 畫基線
-                for (uint16_t i = 1; i <= 279; i += 2)
-                    ILI9341_DrawPixel(&display, i + 20, cursor0, ILI9341_GRAY);
-            }
+			if (menu_channel0_enabled)
+				drawSignal(&display, adc0_time, adc0, adc0_length, pixel_dirty0, cursor0, ILI9341_YELLOW);
 
-            if (menu_channel1_enabled && !adc1_filled)
-                drawSignal(&display, adc1_time, adc1, adc1_length, pixel_dirty1, cursor1, ILI9341_CYAN);
-            else if (menu_channel1_enabled && adc1_filled) {
-                clearSignal(&display, pixel_dirty1);
-                ILI9341_WriteString(&display, 60, cursor1, "No Data", Font_7x10, ILI9341_GRAY, ILI9341_BLACK);
-                for (uint16_t i = 1; i <= 279; i += 2)
-                    ILI9341_DrawPixel(&display, i + 20, cursor1, ILI9341_GRAY);
-            }
+			if (menu_channel1_enabled)
+				drawSignal(&display, adc1_time, adc1, adc1_length, pixel_dirty1, cursor1, ILI9341_CYAN);
+
 		}
 
 		// Draw FPS
@@ -1348,6 +1340,7 @@ int main(void)
 		}
 
 		frames++;
+
 
     /* USER CODE END WHILE */
 
