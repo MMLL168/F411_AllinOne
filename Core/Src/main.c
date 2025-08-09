@@ -39,6 +39,7 @@
 
 #include "ili9341.h"
 #include "oscilloscope.h"
+#include "fatfs.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -54,7 +55,13 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-
+FATFS fs;
+FATFS *pfs;
+FIL fil;
+FRESULT fres;
+DWORD fre_clust;
+uint32_t totalSpace, freeSpace;
+char buffer[100];
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -402,11 +409,61 @@ int main(void)
   MX_TIM3_Init();
   MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
-  // 直接使用 HAL_UART_Transmit 測試
-  //const char *test_msg = "UART Test\r\n";
-  //HAL_UART_Transmit(&huart6, (uint8_t*)test_msg, strlen(test_msg), 100);
 
-  // 啟動DMA接收
+#if 0
+	/* Mount SD Card */
+	if(f_mount(&fs, "", 0) != FR_OK)
+		_Error_Handler(__FILE__, __LINE__);
+
+	/* Open file to write */
+	if(f_open(&fil, "first.txt", FA_OPEN_ALWAYS | FA_READ | FA_WRITE) != FR_OK)
+		_Error_Handler(__FILE__, __LINE__);
+
+	/* Check freeSpace space */
+	if(f_getfree("", &fre_clust, &pfs) != FR_OK)
+		_Error_Handler(__FILE__, __LINE__);
+
+	totalSpace = (uint32_t)((pfs->n_fatent - 2) * pfs->csize * 0.5);
+	freeSpace = (uint32_t)(fre_clust * pfs->csize * 0.5);
+
+	/* free space is less than 1kb */
+	if(freeSpace < 1)
+		_Error_Handler(__FILE__, __LINE__);
+
+	/* Writing text */
+	f_puts("STM32 SD Card I/O Example via SPI\n", &fil);
+	f_puts("Save the world!!!", &fil);
+
+	/* Close file */
+	if(f_close(&fil) != FR_OK)
+		_Error_Handler(__FILE__, __LINE__);
+
+	/* Open file to read */
+	if(f_open(&fil, "first.txt", FA_READ) != FR_OK)
+		_Error_Handler(__FILE__, __LINE__);
+
+	while(f_gets(buffer, sizeof(buffer), &fil))
+	{
+		/* SWV output */
+		printf("%s", buffer);
+		fflush(stdout);
+	}
+
+	/* Close file */
+	if(f_close(&fil) != FR_OK)
+		_Error_Handler(__FILE__, __LINE__);
+
+	/* Unmount SDCARD */
+	if(f_mount(NULL, "", 1) != FR_OK)
+		_Error_Handler(__FILE__, __LINE__);
+
+	while(1)
+	  {
+		/* USER CODE END WHILE */
+		/* USER CODE BEGIN 3 */
+	  }
+#endif
+
 #if 0
   if (HAL_I2S_Receive_DMA(&hi2s2, (uint16_t *)i2s_rx_buffer, I2S_BUFFER_SIZE) != HAL_OK)
   {
@@ -429,10 +486,13 @@ int main(void)
   DWT_CONTROL |= DWT_CTRL_CYCCNTENA_Msk;
 
   adc_reset_cyccnt = 1;
-  if (adc_immediate) {
+  if (adc_immediate)
+  {
 	  // The ADC starts immediately after the previous measurement is handled
 	  HAL_ADC_Start_DMA(&hadc1, (uint32_t*)&adc_data, 2);
-  } else {
+  }
+  else
+  {
 	  // ADC starts by timer
 	  HAL_TIM_Base_Start_IT(&htim10);
   }
@@ -549,6 +609,16 @@ void Error_Handler(void)
   {
   }
   /* USER CODE END Error_Handler_Debug */
+}
+
+void _Error_Handler(char *file, int line)
+{
+	/* USER CODE BEGIN Error_Handler_Debug */
+	/* User can add his own implementation to report the HAL error return state */
+	while(1)
+	{
+	}
+	/* USER CODE END Error_Handler_Debug */
 }
 
 #ifdef  USE_FULL_ASSERT
