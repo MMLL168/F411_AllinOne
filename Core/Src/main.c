@@ -358,6 +358,73 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
     }
 }
 
+/* 定義測試用變量 */
+FATFS fs;           // FatFs檔案系統物件
+FIL fil;           // 檔案物件
+FRESULT fres;      // FatFs返回值
+UINT br, bw;       // 檔案讀寫計數
+
+/* 測試用的簡單字符串 */
+char writeText[] = "Hello SD Card!";    // 要寫入的文字
+char readText[20];                      // 讀取緩衝區
+void SD_Test(void)
+{
+    char test_data[] = "SD Card Test Data";
+    char read_data[30] = {0};
+
+    // 1. 初始化並掛載文件系統
+    printf("Initializing SD card...\r\n");
+    fres = f_mount(&fs, "", 1);
+    if(fres != FR_OK)
+    {
+        printf("f_mount error (%i)\r\n", fres);
+        return;
+    }
+    printf("SD card mounted successfully!\r\n");
+
+    // 2. 寫入測試
+    printf("Writing test data...\r\n");
+    fres = f_open(&fil, "test.txt", FA_WRITE | FA_CREATE_ALWAYS);
+    if(fres != FR_OK)
+    {
+        printf("f_open error (%i)\r\n", fres);
+        return;
+    }
+
+    fres = f_write(&fil, test_data, strlen(test_data), &bw);
+    if(fres != FR_OK)
+    {
+        printf("f_write error (%i)\r\n", fres);
+        f_close(&fil);
+        return;
+    }
+    f_close(&fil);
+    printf("Test data written successfully!\r\n");
+
+    // 3. 讀取測試
+    printf("Reading test data...\r\n");
+    fres = f_open(&fil, "test.txt", FA_READ);
+    if(fres != FR_OK)
+    {
+        printf("f_open error (%i)\r\n", fres);
+        return;
+    }
+
+    f_read(&fil, read_data, strlen(test_data), &br);
+    f_close(&fil);
+
+    // 4. 驗證數據
+    if(strcmp(test_data, read_data) == 0)
+    {
+        printf("Test passed! Read data: %s\r\n", read_data);
+    }
+    else
+    {
+        printf("Test failed!\r\n");
+        printf("Expected: %s\r\n", test_data);
+        printf("Got: %s\r\n", read_data);
+    }
+}
 
 /* USER CODE END 0 */
 
@@ -409,7 +476,13 @@ int main(void)
   MX_TIM3_Init();
   MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
-
+//  while(1)
+//  {
+//  printf("Starting SD card test...\r\n");
+//  SD_Test();
+//  HAL_Delay(1000); // 等待1秒鐘
+//
+//  }
 #if 0
 	/* Mount SD Card */
 	if(f_mount(&fs, "", 0) != FR_OK)

@@ -32,7 +32,7 @@ DRESULT SD_disk_read (BYTE pdrv, BYTE* buff, DWORD sector, UINT count);
 DRESULT SD_disk_write (BYTE pdrv, const BYTE* buff, DWORD sector, UINT count);
 DRESULT SD_disk_ioctl (BYTE pdrv, BYTE cmd, void* buff);
 
-#define SPI_TIMEOUT 100
+#define SPI_TIMEOUT 1000
 
 extern SPI_HandleTypeDef 	hspi4;
 #define HSPI_SDCARD		 	&hspi4
