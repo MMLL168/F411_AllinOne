@@ -1,0 +1,10 @@
+../Core/Src/oscilloscope.c:21:6:InitOscState	288	static
+../Core/Src/oscilloscope.c:74:13:drawAxis	40	static
+../Core/Src/oscilloscope.c:101:13:clearCursor	24	static
+../Core/Src/oscilloscope.c:106:13:clearTrigger	24	static
+../Core/Src/oscilloscope.c:111:13:drawCursor	48	static
+../Core/Src/oscilloscope.c:122:13:drawTrigger	48	static
+../Core/Src/oscilloscope.c:133:13:drawSignal	1760	static
+../Core/Src/oscilloscope.c:251:13:clearSignal	24	static
+../Core/Src/oscilloscope.c:266:13:drawSignalParam	112	static
+../Core/Src/oscilloscope.c:310:6:Oscilloscope_Process	528	static
