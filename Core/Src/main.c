@@ -426,6 +426,16 @@ void SD_Test(void)
     }
 }
 
+void _Error_Handler(char * file, int line)
+{
+  /* USER CODE BEGIN Error_Handler_Debug */
+  /* User can add his own implementation to report the HAL error return state */
+  while(1)
+  {
+  }
+  /* USER CODE END Error_Handler_Debug */
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -476,14 +486,14 @@ int main(void)
   MX_TIM3_Init();
   MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
-//  while(1)
-//  {
-//  printf("Starting SD card test...\r\n");
-//  SD_Test();
-//  HAL_Delay(1000); // 等待1秒鐘
-//
-//  }
-#if 0
+  //while(1)
+  {
+  printf("Starting SD card test...\r\n");
+  SD_Test();
+  HAL_Delay(1000); // 等待1秒鐘
+
+  }
+#if 1
 	/* Mount SD Card */
 	if(f_mount(&fs, "", 0) != FR_OK)
 		_Error_Handler(__FILE__, __LINE__);
@@ -530,10 +540,9 @@ int main(void)
 	if(f_mount(NULL, "", 1) != FR_OK)
 		_Error_Handler(__FILE__, __LINE__);
 
-	while(1)
+	//while(1)
 	  {
-		/* USER CODE END WHILE */
-		/* USER CODE BEGIN 3 */
+
 	  }
 #endif
 
@@ -595,7 +604,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-  }
+	  }
   /* USER CODE END 3 */
 }
 
@@ -677,21 +686,10 @@ void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
-  __disable_irq();
-  while (1)
+  while(1)
   {
   }
   /* USER CODE END Error_Handler_Debug */
-}
-
-void _Error_Handler(char *file, int line)
-{
-	/* USER CODE BEGIN Error_Handler_Debug */
-	/* User can add his own implementation to report the HAL error return state */
-	while(1)
-	{
-	}
-	/* USER CODE END Error_Handler_Debug */
 }
 
 #ifdef  USE_FULL_ASSERT

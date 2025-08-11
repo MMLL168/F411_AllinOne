@@ -5,8 +5,8 @@
 ../Core/Src/main.c:238:6:HAL_TIM_PeriodElapsedCallback	5
 ../Core/Src/main.c:258:6:HAL_ADC_ConvCpltCallback	33
 ../Core/Src/main.c:370:6:SD_Test	6
-../Core/Src/main.c:435:5:main	4
-../Core/Src/main.c:606:6:SystemClock_Config	3
-../Core/Src/main.c:652:6:PeriphCommonClock_Config	2
-../Core/Src/main.c:676:6:Error_Handler	1
-../Core/Src/main.c:687:6:_Error_Handler	1
+../Core/Src/main.c:429:6:_Error_Handler	1
+../Core/Src/main.c:445:5:main	13
+../Core/Src/main.c:615:6:SystemClock_Config	3
+../Core/Src/main.c:661:6:PeriphCommonClock_Config	2
+../Core/Src/main.c:685:6:Error_Handler	1

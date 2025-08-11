@@ -38,34 +38,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := F411_INMP441_0
+BUILD_ARTIFACT_NAME := F411_AllinOne
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-F411_INMP441_0.elf \
+F411_AllinOne.elf \
 
 MAP_FILES += \
-F411_INMP441_0.map \
+F411_AllinOne.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-F411_INMP441_0.list \
+F411_AllinOne.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: F411_INMP441_0.elf secondary-outputs
+main-build: F411_AllinOne.elf secondary-outputs
 
 # Tool invocations
-F411_INMP441_0.elf F411_INMP441_0.map: $(OBJS) $(USER_OBJS) C:\Work\git\repotitory\F411_AllinOne\STM32F411RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "F411_INMP441_0.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Work\git\repotitory\F411_AllinOne\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F411_INMP441_0.map" -Wl,--gc-sections -static -u _printf_float -u _scanf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -Wl,--end-group
+F411_AllinOne.elf F411_AllinOne.map: $(OBJS) $(USER_OBJS) D:\Work_202506\Git\F411_AllinOne\STM32F411RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "F411_AllinOne.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\Work_202506\Git\F411_AllinOne\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F411_AllinOne.map" -Wl,--gc-sections -static -u _printf_float -u _scanf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -74,14 +74,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-F411_INMP441_0.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "F411_INMP441_0.list"
+F411_AllinOne.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "F411_AllinOne.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) F411_INMP441_0.elf F411_INMP441_0.list F411_INMP441_0.map default.size.stdout
+	-$(RM) F411_AllinOne.elf F411_AllinOne.list F411_AllinOne.map default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
